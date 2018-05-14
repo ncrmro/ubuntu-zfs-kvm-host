@@ -9,6 +9,20 @@
 * [Stack Choices](#stack-choices) - Reasons and benifits of each tech used in stack.
 
 
+## Ansible
+
+Install python3
+`brew install python3`
+
+`pip install --upgrade pip virtualenv`
+
+`virtualenv ~/.venv/kvm-host`
+
+`source ~/.venv/kvm-host/bin/activate`
+
+`pip install -r ./requirements.txt`
+
+
 ## KVM
 Widly supported across linux as the defacto virtualization infrastructure even AWS has transistioned from xen to KVM.
 
