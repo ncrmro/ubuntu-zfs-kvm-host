@@ -13,9 +13,9 @@
     <module name="kvm-host" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
     <option name="SCRIPT_NAME" value="$USER_HOME$/.venv/kvm-host/bin/ansible-playbook" />
-    <option name="PARAMETERS" value="-i development init.yml --ask-vault-pass" />
+    <option name="PARAMETERS" value="-i inventories/development init.yml" />
     <option name="SHOW_COMMAND_LINE" value="true" />
-    <option name="EMULATE_TERMINAL" value="false" />
+    <option name="EMULATE_TERMINAL" value="true" />
     <method />
   </configuration>
 </component>

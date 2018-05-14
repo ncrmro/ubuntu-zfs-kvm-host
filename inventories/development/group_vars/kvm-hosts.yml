@@ -1,11 +1,10 @@
----
 data_location: "/data"
 vm_location: "{{data_location}}/VMs"
 
 kvm_base_guests:
   ubuntu18_04_server:
     name: ubuntu18_04_server
-    mem: 4096
+    mem: 1024
     cpus: 4
     os_type: linux
     os_variant: ubuntu16.04
