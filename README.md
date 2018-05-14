@@ -1,10 +1,10 @@
 ## Readme Layout
-* [Ansible](#Ansible) - software that automates software provisioning, configuration management, and application deployment
-* [KVM](#KVM) - virtualization infrastructure for the Linux kernel that turns it into a hypervisor
-* [ZFS](#ZFS) - file system and logical volume manager
- * [Inspecting ZFS](#Inspecting-ZFS)
- * [Snapshoting](#Snapshotting)
- * [Adding Hardware](#Adding-Hardware)
+* [Ansible](#ansible) - software that automates software provisioning, configuration management, and application deployment
+* [KVM](#kvm) - virtualization infrastructure for the Linux kernel that turns it into a hypervisor
+* [ZFS](#zfs) - file system and logical volume manager
+ * [Inspecting ZFS](#inspecting-zfs)
+ * [Snapshoting](#snapshotting)
+ * [Adding Hardware](#adding-hardware)
 * [Provisioning the host](#provisioning-the-linux-host) - Incase of catastropic failure steps to rebuild root kvm host.
 * [Stack Choices](#stack-choices) - Reasons and benifits of each tech used in stack.
 
