@@ -11,8 +11,12 @@
 
 ## Getting Started
 
-Install python3
-`brew install python3`
+When working in the development environment you will need vagrant to create simulated kvm-host and python for ansible.
+
+Install hombrew-cask, vagrant and it's dependencies
+`brew tap caskroom/cask`
+
+`brew cask install virtualbox vagrant vagrant-manager`
 
 Install python3 and pipenv
 `brew install python3 pipenv`
@@ -20,9 +24,25 @@ Install python3 and pipenv
 Install project dependencies and activate pipenv
 `pipenv install && pipenv shell`
 
-### Ansible Vault
+### Ansible
 
-To generate the secret file, run `ansible-vault create secret` from the project root.
+To get started working with ansible in development first run `vagrant up`
+
+SSH into your vagrant box
+`vagrant ssh`
+`ssh -i ".vagrant/machines/default/virtualbox/private_key" vagrant@10.0.1.10`
+`chmod 0444 .vagrant/machines/default/virtualbox/private_key`
+
+#### Ansible Vault
+Create a password file
+
+```
+mkdir ~/.ansible ; \
+echo "mypassword" >> ~/.ansible/.vault_pass.txt && \
+chmod 0444 ~/.ansible/.vault_pass.txt
+```
+
+To generate the secret file, run `ansible-vault create vars/secret` from the project root.
 
 The first prompt will create your vault password.
 
@@ -149,10 +169,10 @@ Finally leats create a new zfs on the hdd1 pool and mount it at hdd1/timemachine
 
 `zfs create -o mountpoint=/mnt/timemachine hdd1/timemachine`
 
-### ZFS reading
+### Further reading
 
-[ZFS to Dedupe or not to Dedupe](https://constantin.glez.de/2011/07/27/zfs-to-dedupe-or-not-dedupe/)
-
+* [ZFS to Dedupe or not to Dedupe](https://constantin.glez.de/2011/07/27/zfs-to-dedupe-or-not-dedupe/)
+* [Ansible Playbooks best practices: Alternative Directory Layout](http://docs.ansible.com/ansible/latest/user_guide/playbooks_best_practices.html#alternative-directory-layout)
 
 ## Provisioning the linux host.
 

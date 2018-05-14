@@ -45,3 +45,11 @@ crashlytics-build.properties
 fabric.properties
 
 creds.yml
+secret
+*.retry
+
+### Vagrant template
+.vagrant/
+*.log
+
+

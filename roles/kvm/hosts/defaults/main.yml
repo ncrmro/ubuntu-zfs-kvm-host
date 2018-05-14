@@ -1,4 +1,6 @@
 ---
+ssh_key: ~/.ssh/id_rsa
+
 libvirt_bridges:
 - name: default
   forward: nat
