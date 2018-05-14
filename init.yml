@@ -1,11 +1,12 @@
 ---
 - name: Set up kvm hosts
-  hosts: userv
+  hosts: kvm-host
   become_user: root
   remote_user: ncrmro
   become: true
   gather_facts: True
   vars_files:
+    - secret
     - vars/env.yml
     - vars/kvm.yml
     - vars/docker.yml
