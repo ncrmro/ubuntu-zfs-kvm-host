@@ -1,4 +1,10 @@
-## Initial setup.
+
+Readme Layout
+* Provisioning the linux host.
+* ZFS
+* KVM
+
+## Provisioning the linux host.
 
 Create and ubuntu 18.04 LTS Desktop USB disk.
 
@@ -8,7 +14,14 @@ Condensed version of that guides commands can be found [here](https://gist.githu
 
 ## ZFS
 
-The operating system is installed on ZFS. Thus we gan all the benifits of ZFS on our root drive.
+The operating system and storage drives use ZFS. Thus we gan all the benifits of ZFS on our root drive and storage.
+
+* checksumming: each block is verified
+* compression: data is compressed
+* deduplication: only one copy of duplicate data is stored
+
+
+### Turning hardware into zfs pools
 
 To see our root zfs pool "rpool" for "root pool"
 `zpool list`
@@ -18,7 +31,23 @@ NAME    SIZE  ALLOC   FREE  EXPANDSZ   FRAG    CAP  DEDUP  HEALTH  ALTROOT
 rpool   236G  4.47G   232G         -     0%     1%  1.00x  ONLINE  -
 ```
 
-`zfs list`
+
+list all devices and mount points
+`sudo lsblk -o NAME,FSTYPE,SIZE,TYPE,MOUNTPOINT,LABEL`
+
+```
+NAME   FSTYPE       SIZE MOUNTPOINT LABEL
+sda    zfs_member 238.5G            rpool
+├─sda1 zfs_member   238G            rpool
+└─sda3 vfat         512M /boot/efi  EFI
+sdb               931.5G            
+├─sdb1 zfs_member 931.5G            hdd1
+└─sdb9                8M   
+```
+Here we can confirm that device sda is a zfs member with rpool as the label.
+
+Using the zfs command we can inspect rpool
+`zfs list -r rpool`
 
 Thie output should be like so
 ```
@@ -30,11 +59,63 @@ rpool/home         1.16M   224G   104K  /home
 rpool/home/username   144K   224G   144K  /home/username
 rpool/home/root     940K   224G   940K  /root
 rpool/var           163M   224G    96K  /var
-rpool/var/cache     156M   224G   156M  /var/cache
 rpool/var/log      7.16M   224G  7.16M  legacy
-rpool/var/mail       96K   224G    96K  /var/mail
-rpool/var/spool     112K   224G   112K  /var/spool
-rpool/var/tmp       128K   224G   128K  legacy
+```
+
+### Snapshotting
+
+List all the snapshots with `zfs list -t snapshot`
 
 ```
+NAME                        USED  AVAIL  REFER  MOUNTPOINT
+rpool/ROOT/ubuntu@install  13.4M      -   818M  -
+```
+
+We can see the snapshot made at install.
+
+#### New snapshot
+
+Lets go ahead and make a new snapshots `zfs snapshot rpool/ROOT/ubuntu@test123`.
+```
+NAME                        USED  AVAIL  REFER  MOUNTPOINT
+rpool/ROOT/ubuntu@install  13.4M      -   818M  -
+rpool/ROOT/ubuntu@test123     0B      -  4.30G  -
+```
+
+We can now see the new snapshot we made
+
+
+### Adding a new storage device
+List all the storage drives
+`ls /dev/disk/by-id/`
+
+```
+ata-M4-CT256M4SSD2_00000000123509146D38        ata-ST1000DM003-1SB102_Z9A59DHH-part1
+ata-M4-CT256M4SSD2_00000000123509146D38-part1  ata-ST1000DM003-1SB102_Z9A59DHH-part9
+ata-M4-CT256M4SSD2_00000000123509146D38-part3
+ata-ST1000DM003-1SB102_Z9A59DHH
+```
+
+In this case the device we want is `/dev/disk/by-id/ata-ST1000DM003-1SB102_Z9A59DHH`
+While our root device is `/dev/disk/by-id/ata-M4-CT256M4SSD2_00000000123509146D38`
+
+Lets clean the disk with `sgdisk --zap-all /dev/disk/by-id/ata-ST1000DM003-1SB102_Z9A59DHH`
+
+#### Creating the new pool
+
+Now that we have the device we can choose some options such as where to mount and weather or not to enable compression.
+
+```
+zpool create \
+      -O compression=lz4 \
+      hdd1 /dev/disk/by-id/ata-ST1000DM003-1SB102_Z9A59DHH
+```
+
+Finally leats create a new zfs on the hdd1 pool and mount it at hdd1/timemachine 
+
+`zfs create -o mountpoint=/mnt/timemachine hdd1/timemachine`
+
+# ZFS reading
+
+[ZFS to Dedupe or not to Dedupe](https://constantin.glez.de/2011/07/27/zfs-to-dedupe-or-not-dedupe/)
 
