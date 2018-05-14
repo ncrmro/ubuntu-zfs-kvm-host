@@ -9,7 +9,7 @@
 * [Stack Choices](#stack-choices) - Reasons and benifits of each tech used in stack.
 
 
-## Ansible
+## Getting Started
 
 Install python3
 `brew install python3`
@@ -18,9 +18,11 @@ Install python3
 
 `virtualenv ~/.venv/kvm-host`
 
-`source ~/.venv/kvm-host/bin/activate`
+Install python3 and pipenv
+`brew install python3 pipenv`
 
-`pip install -r ./requirements.txt`
+Install project dependencies and activate pipenv
+`pipenv install && pipenv shell`
 
 ### Ansible Vault
 
