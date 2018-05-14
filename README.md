@@ -14,7 +14,7 @@
 Install python3
 `brew install python3`
 
-`pip install --upgrade pip virtualenv`
+`pip3 install --upgrade pip virtualenv`
 
 `virtualenv ~/.venv/kvm-host`
 
