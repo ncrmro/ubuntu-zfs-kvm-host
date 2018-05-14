@@ -21,8 +21,17 @@ Install hombrew-cask, vagrant and it's dependencies
 Install python3 and pipenv
 `brew install python3 pipenv`
 
-Install project dependencies and activate pipenv
-`pipenv install && pipenv shell`
+Upgrade pip and install virtualenv
+`pip3 install --upgrade pip virtualenv`
+
+Create the virtualenv
+`virtualenv ~/.local/share/virtualenvs/kvm-host`
+
+Activate the virtualenv
+`source ~/.venv/kvm-host/bin/activate`
+
+Install project dependencies
+`pipenv install`
 
 ### Ansible
 
