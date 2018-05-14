@@ -46,3 +46,7 @@ fabric.properties
 
 creds.yml
 secret
+/.gitignore
+### Vagrant template
+.vagrant/
+

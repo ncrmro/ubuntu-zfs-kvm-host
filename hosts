@@ -1,5 +1,8 @@
 [local]
-my_machine ansible_host=127.0.0.1 ansible_python_interpreter=/home/ncrmro/.venv/kvm-host/bin/python
+my_machine ansible_host=127.0.0.1 ansible_python_interpreter=~/.local/share/virtualenvs/kvm-host-H2rqTecZ
 
-[kvm-host]
+[kvm-hosts]
+kvm-host ansible_python_interpreter=/usr/bin/python3
+
+[kvm-hosts]
 kvm-host ansible_python_interpreter=/usr/bin/python3
