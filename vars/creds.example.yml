@@ -6,3 +6,8 @@ cloudflare_api_key: ""
 
 ec2_access_key: ""
 ec2_secret_key: ""
+
+admin_fullname: Test User
+admin_username: username
+admin_email: "email"
+admin_password: "password"
