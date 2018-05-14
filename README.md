@@ -1,27 +1,37 @@
+## Readme Layout
+* [Ansible](#Ansible) - software that automates software provisioning, configuration management, and application deployment
+* [KVM](#KVM) - virtualization infrastructure for the Linux kernel that turns it into a hypervisor
+* [ZFS](#ZFS) - file system and logical volume manager
+ * [Inspecting ZFS](#Inspecting-ZFS)
+ * [Snapshoting](#Snapshotting)
+ * [Adding Hardware](#Adding-Hardware)
+* [Provisioning the host](#provisioning-the-linux-host) - Incase of catastropic failure steps to rebuild root kvm host.
+* [Stack Choices](#stack-choices) - Reasons and benifits of each tech used in stack.
 
-Readme Layout
-* Provisioning the linux host.
-* ZFS
-* KVM
 
-## Provisioning the linux host.
+## KVM
+Widly supported across linux as the defacto virtualization infrastructure even AWS has transistioned from xen to KVM.
 
-Create and ubuntu 18.04 LTS Desktop USB disk.
+Inspecting our VM's
+`virsh list --all`
 
-Follow guide [here](https://github.com/zfsonlinux/zfs/wiki/Ubuntu-18.04-Root-on-ZFS)
+This would give us a list of all vms.
+```
+ Id    Name                           State
+----------------------------------------------------
+ 1     dnode0                         running
+ 2     bastion                        running
+ -     ubuntu18_04_server             shut off
+```
 
-Condensed version of that guides commands can be found [here](https://gist.github.com/ncrmro/f389c1362baf4d19d6e8b310d66902e6#file-zfsubuntubionic-md)
+We can reboot machines with reboot `virsh reboot dnode0`
 
 ## ZFS
 
 The operating system and storage drives use ZFS. Thus we gan all the benifits of ZFS on our root drive and storage.
 
-* checksumming: each block is verified
-* compression: data is compressed
-* deduplication: only one copy of duplicate data is stored
 
-
-### Turning hardware into zfs pools
+### Inspecting ZFS
 
 To see our root zfs pool "rpool" for "root pool"
 `zpool list`
@@ -84,6 +94,8 @@ rpool/ROOT/ubuntu@test123     0B      -  4.30G  -
 
 We can now see the new snapshot we made
 
+### Turning hardware into zfs pools
+
 
 ### Adding a new storage device
 List all the storage drives
@@ -97,6 +109,7 @@ ata-ST1000DM003-1SB102_Z9A59DHH
 ```
 
 In this case the device we want is `/dev/disk/by-id/ata-ST1000DM003-1SB102_Z9A59DHH`
+
 While our root device is `/dev/disk/by-id/ata-M4-CT256M4SSD2_00000000123509146D38`
 
 Lets clean the disk with `sgdisk --zap-all /dev/disk/by-id/ata-ST1000DM003-1SB102_Z9A59DHH`
@@ -115,7 +128,27 @@ Finally leats create a new zfs on the hdd1 pool and mount it at hdd1/timemachine
 
 `zfs create -o mountpoint=/mnt/timemachine hdd1/timemachine`
 
-# ZFS reading
+### ZFS reading
 
 [ZFS to Dedupe or not to Dedupe](https://constantin.glez.de/2011/07/27/zfs-to-dedupe-or-not-dedupe/)
 
+
+## Provisioning the linux host.
+
+Create and ubuntu 18.04 LTS Desktop USB disk.
+
+Follow guide [here](https://github.com/zfsonlinux/zfs/wiki/Ubuntu-18.04-Root-on-ZFS)
+
+Condensed version of that guides commands can be found [here](https://gist.github.com/ncrmro/f389c1362baf4d19d6e8b310d66902e6#file-zfsubuntubionic-md)
+
+## Stack Choices
+* Ubuntu
+* KVM - Widly supported across linux as the defacto virtualization infrastructure even AWS has transistioned from xen to KVM.
+* ZFS
+ * [Data integrity](https://en.wikipedia.org/wiki/ZFS#Data_integrity)
+ * [Native raid with zfs](https://en.wikipedia.org/wiki/ZFS#RAID_(%22RaidZ%22))
+ * [Avoidance of hardware RAID controllers](https://en.wikipedia.org/wiki/ZFS#Avoidance_of_hardware_RAID_controllers)
+ * compression: data is compressed
+ * deduplication: only one copy of duplicate data is stored
+ * [Snapshots and clones](https://en.wikipedia.org/wiki/ZFS#Snapshots_and_clones)
+        * [Sending and receving snapshots to remote hosts](https://en.wikipedia.org/wiki/ZFS#Sending_and_receiving_snapshots)
