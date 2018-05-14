@@ -1,0 +1,14 @@
+- name: Need pip to install docker-py
+  apt: name={{item}} state=present
+  with_items:
+       - zfsutils-linux
+
+- name: Add the zfs module
+  modprobe:
+    name: zfs
+    state: present
+
+# /dev/sda1
+# ata-ST1000DM003-1SB102_Z9A59DHH
+# sudo zpool create -f hdd1 /dev/disk/by-id/ata-ST1000DM003-1SB102_Z9A59DHH
+# virsh pool-define-as --name zfsfilepool --source-name hdd1 --type zfs

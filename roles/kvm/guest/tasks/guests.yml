@@ -1,0 +1,19 @@
+- name: "Clone guests {{ guest }} from base guests"
+  include_tasks: util/clone.yml
+  when: guest.key not in vms.list_vms
+
+- name: "Update cloned guests {{ guest }} hostname"
+  include_tasks: util/changehostname.yml
+  vars:
+    to_guest: "{{ guest }}"
+    from_guest: "{{ kvm_base_guests[guest.value.base_guest] }}"
+  when: hostvars[inventory_hostname][guest.key + '_unreachable']
+
+- name: Boot guests
+  include_tasks: util/start.yml
+#
+#- name: Resize disk
+#  include_tasks: util/resize_disk.yml
+#  vars:
+#    #original_size:
+#    expanded_size: 40GB

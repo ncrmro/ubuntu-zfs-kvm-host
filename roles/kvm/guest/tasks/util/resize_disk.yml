@@ -1,0 +1,29 @@
+---
+- set_fact:
+     original_size: "{{ original_size | default(10737418240) }}" # 10 GB
+     expanded_size: "{{ expanded_size | default(20) }}"
+     device: "{{ expanded_size | default('/dev/mmcblk0') }}"
+
+
+- name: Assert root partition is expanded
+  assert:
+    that: "outer_item.mount != '/' or outer_item.size_total > {{original_size}}"
+  with_items: '{{ ansible_mounts }}'
+  ignore_errors: yes
+  delegate_to: "{{ from_guest.domain }}"
+  register: expanded
+  loop_control:
+    loop_var: outer_item
+
+#- name: Attach to Bridge Network Interface
+#  include_tasks: shutdown.yml
+#  vars:
+#    guest_name: "{{ guest.key }}"
+
+#- name: Expand partition
+#  command: parted {{device}} resizepart 2 {{ expanded_size }} # NOTE: Assumes 16GB card
+#  when: expanded|failed
+#  #notify: Expand filesystem
+#
+#- name: Expand filesystem
+#  command: resize2fs {{device}}

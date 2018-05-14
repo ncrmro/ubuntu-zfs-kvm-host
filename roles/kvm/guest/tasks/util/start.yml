@@ -1,0 +1,5 @@
+---
+- name: "Start guest vm {{ guest.key }}"
+  virt:
+    name: "{{ guest.key }}"
+    state: running

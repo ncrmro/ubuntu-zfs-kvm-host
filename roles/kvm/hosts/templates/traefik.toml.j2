@@ -1,0 +1,75 @@
+{#
+    Check traefik sample for full config options
+    https://raw.githubusercontent.com/containous/traefik/master/traefik.sample.toml
+#}
+logLevel = "INFO"
+
+[traefikLog]
+  filePath = "{{ traefik_log_path }}"
+
+[entryPoints]
+  [entryPoints.http]
+  address = ":80"
+
+  [entryPoints.https]
+  address = ":443"
+    [entryPoints.https.tls]
+
+[acme]
+email = "ncrmro@gmail.com"
+storage = "/etc/traefik/certs/acme.json"
+entryPoint = "https"
+# Enable on demand certificate generation.
+onHostRule = true
+[acme.dnsChallenge]
+provider = "cloudflare"
+
+  # Provider used.
+  #
+  # Required
+  #
+  # provider = "digitalocean"
+
+[api]
+  # Name of the related entry point
+  #
+  # Optional
+  # Default: "traefik"
+  #
+  entryPoint = "traefik"
+  dashboard = true
+
+[file]
+# Backends
+[backends]
+  [backends.dnode0]
+    [backends.dnode0.servers]
+      [backends.dnode0.servers.server0]
+        url = "http://dnode0.kvm.local:443"
+
+
+  [backends.userv-traefik]
+    [backends.userv-traefik.servers]
+      [backends.userv-traefik.servers.server0]
+        url = "http://localhost:8080"
+
+# Frontends
+[frontends]
+
+  [frontends.dnode0]
+    entryPoints = ["http", "https"]
+    backend = "dnode0"
+    passHostHeader = true
+
+  [frontends.dnode0.routes]
+      [frontends.dnode0.routes.route0]
+        rule = "HostRegexp:dnode0.kvm.home.jtronics.co,{subdomain:[a-z]+}.dnode0.kvm.home.jtronics.co,grafana.jtronics.co"
+
+  [frontends.userv-traefik]
+    entryPoints = ["http", "https"]
+    backend = "userv-traefik"
+
+  [frontends.userv-traefik.routes]
+      [frontends.userv-traefik.routes.route0]
+        rule = "Host:traefik.userv.home.jtronics.co"
+

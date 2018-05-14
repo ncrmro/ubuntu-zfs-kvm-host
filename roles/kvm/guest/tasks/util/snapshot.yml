@@ -1,0 +1,11 @@
+---
+- pause:
+    seconds: 3
+
+- name: Shutdown before we snapshot to ensure consitancy
+  include_tasks: shutdown.yml
+  vars:
+    guest_name: "{{ guest.key }}"
+
+- name: Create snapshot
+  shell: virsh snapshot-create-as --domain {{ guest.key }} --name {{ snapshot_name }}

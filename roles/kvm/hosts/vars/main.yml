@@ -1,0 +1,13 @@
+---
+libvirt_qemu_resolv_conf_head: '/etc/systemd/resolved.conf'
+
+kvm_sysctl_settings:
+  - name: 'net.bridge.bridge-nf-call-ip6tables'
+    value: 0
+    state: "present"
+  - name: 'net.bridge.bridge-nf-call-iptables'
+    value: 0
+    state: "present"
+  - name: 'net.bridge.bridge-nf-call-arptables'
+    value: 0
+    state: "present"

@@ -1,0 +1,45 @@
+- name: Add base guest hosts
+  add_host:
+    hostname: "{{ item.value.hostname }}"
+    groups:
+      - kvm_guests
+      - kvm_base_guests
+    ansible_ssh_host: "{{ item.value.domain }}"
+    ansible_python_interpreter: /usr/bin/python3
+  with_dict: "{{ kvm_base_guests }}"
+
+- name: Add guest hosts
+  add_host:
+    hostname: "{{ item.value.hostname }}"
+    groups:
+      - kvm_guests
+    ansible_python_interpreter: /usr/bin/python3
+  with_dict: "{{ kvm_guests }}"
+
+- name: Can we reach guest by their hostname
+  command: ping -c1 "{{ item.value.hostname }}"
+  ignore_errors: yes
+  with_dict: "{{ kvm_guests }}"
+  register: guests_reachable
+
+
+- name: debug
+  debug:
+    msg: "{{ guests_reachable.results }}"
+
+- set_fact: {"{{ item.item.key + '_unreachable'}}":"{{ item.failed }}"}
+  with_items: "{{ guests_reachable.results }}"
+
+#- group_by: key=unreachable-{{ item.item.key }}
+#  when: item.failed
+#  with_items: "{{ guests_reachable.results }}"
+
+
+- name: debug
+  debug:
+    msg: "{{ hostvars[inventory_hostname][item.key + '_unreachable']}}"
+  with_dict: "{{ kvm_guests }}"
+
+- name: debug
+  debug:
+    msg: "{{guests_reachable.results | map(attribute='item.key') | list}}"

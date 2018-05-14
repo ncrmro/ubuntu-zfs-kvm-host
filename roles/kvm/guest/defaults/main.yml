@@ -1,0 +1,10 @@
+---
+
+kvm_base_guests:
+  dnode0:
+    mem: 4096
+    cpus: 2
+    os_type: ubuntu16.04
+    disk_size: 10G
+    file_type: qcow2
+    mac: 52:54:00:45:cb:7c

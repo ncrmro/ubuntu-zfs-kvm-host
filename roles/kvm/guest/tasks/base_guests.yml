@@ -1,0 +1,12 @@
+- name: "create : {{ guest.key }}"
+  include_tasks: util/create.yml
+  when: item.key not in vms.list_vms
+
+- set_fact:
+    run_initial_snapshot: "{{'initial_install' not in base_guest_snapshots.results[0].stdout_lines}}"
+
+- name: "snapshot : {{ guest.key }}"
+  include_tasks: util/snapshot.yml
+  vars:
+    snapshot_name: initial_install
+  when: run_initial_snapshot

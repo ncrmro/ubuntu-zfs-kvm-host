@@ -1,0 +1,24 @@
+---
+libvirt_bridges:
+- name: default
+  forward: nat
+  bridge: virbr0
+  domain: kvm
+  ip_address: 192.168.122.1
+  ip_netmask: 255.255.255.0
+  dhcp_start: 192.168.122.2
+  dhcp_end:   192.168.122.253
+  #ipv6:
+  ipv6_prefix: 64
+  #dhcp6_start:
+  #dhcp6_end:
+
+traefik_install_dir: /usr/bin
+traefik_binary_url: https://github.com/containous/traefik/releases/download/v1.5.0/traefik_linux-amd64
+traefik_bin_path: "{{ traefik_install_dir }}/traefik"
+traefik_config_file: /etc/traefik.toml
+traefik_template: traefik.toml
+traefik_systemd_unit_template: traefik.service
+traefik_systemd_unit_dest: /etc/systemd/system/traefik.service
+traefik_log_path: /var/log/traefik.log
+traefik_update: no
