@@ -1,0 +1,21 @@
+---
+- name: Set up kvm hosts
+  hosts: userv
+  become_user: root
+  remote_user: ncrmro
+  become: true
+  gather_facts: True
+  vars_files:
+    - vars/env.yml
+    - vars/kvm.yml
+    - vars/docker.yml
+    - vars/creds.yml
+  vars:
+    ansible_ssh_private_key_file: "{{ ssh_key }}"
+    common_sidecar: false
+    common_node_exporter: false
+    common_security: true
+    common_docker: false
+  roles:
+    - common
+

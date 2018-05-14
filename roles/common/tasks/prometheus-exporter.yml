@@ -1,0 +1,77 @@
+---
+# Example group command from Ansible Playbooks
+- group:
+    name: node_exporter
+    state: present
+
+- user:
+    name: node_exporter
+    comment: node_exporter
+    group: node_exporter
+
+- name: Creates directory
+  file:
+    path: /tmp/prometheus
+    state: directory
+    owner: node_exporter
+    group: node_exporter
+
+- name: Creates directory
+  file:
+    path: /etc/prometheus
+    state: directory
+    owner: node_exporter
+    group: node_exporter
+
+
+- name: Creates directory
+  file:
+    path: /var/lib/prometheus
+    state: directory
+    owner: node_exporter
+    group: node_exporter
+
+
+- name: Download Exporter
+  get_url:
+    url: https://github.com/prometheus/node_exporter/releases/download/v0.15.1/node_exporter-0.15.1.linux-amd64.tar.gz
+    dest: /tmp/node_exporter-0.15.1.linux-amd64.tar.gz
+
+- name: Check node_exporter exists.
+  stat:
+    path: "/usr/local/bin/node_exporter"
+  register: node_exporter
+
+- name: Extract Exporter
+  shell: >
+    tar xvf /tmp/node_exporter-0.15.1.linux-amd64.tar.gz
+    -C /tmp/
+  when: node_exporter.stat.exists != true
+
+- name: Extract Exporter
+  shell: >
+    cp /tmp/node_exporter-0.15.1.linux-amd64/node_exporter /usr/local/bin
+  when: node_exporter.stat.exists != true
+
+- name: Copy Exorter configuration file.
+  template:
+    src: node_exporter.service.j2
+    dest: /etc/systemd/system/node_exporter.service
+    owner: root
+    group: root
+    mode: 0600
+
+- name: systemctl start Exporter
+  shell: >
+    chown node_exporter:node_exporter /usr/local/bin/node_exporter
+
+- name: enable service httpd and ensure it is not masked
+  systemd:
+    name: node_exporter
+    state: started
+    enabled: yes
+
+- name: enable service httpd and ensure it is not masked
+  systemd:
+    name: node_exporter
+    state: restarted

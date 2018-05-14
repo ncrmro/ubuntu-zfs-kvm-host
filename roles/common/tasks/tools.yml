@@ -1,0 +1,7 @@
+---
+- name: Install debugging tools
+  apt: name={{item}} state=present
+  with_items:
+       - htop
+       - iftop
+       - nano
