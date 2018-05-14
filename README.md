@@ -22,6 +22,15 @@ Install python3
 
 `pip install -r ./requirements.txt`
 
+### Ansible Vault
+
+To generate the secret file, run `ansible-vault create secret` from the project root.
+
+The first prompt will create your vault password.
+
+The second prompt will send you to a vim session, in that vim sesson input:
+ 
+`ansible_sudo_pass: your-sudo-password`
 
 ## KVM
 Widly supported across linux as the defacto virtualization infrastructure even AWS has transistioned from xen to KVM.
