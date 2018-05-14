@@ -1,0 +1,22 @@
+---
+domain_zone: poetic.io
+cloudflare_email : ""
+cloudflare_api_key: ""
+
+domains:
+  gitlab:
+    record: git
+    type: A
+  registry:
+    record: registry
+    type: CNAME
+  grafana:
+    record: grafana
+    type: CNAME
+  prometheus:
+    record: prometheus
+    type: CNAME
+  traefik:
+    record: hello-world
+    type: CNAME
+

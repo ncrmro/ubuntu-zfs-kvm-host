@@ -1,0 +1,8 @@
+---
+# this file can be encrypted with ansible-vault
+
+cloudflare_email : ""
+cloudflare_api_key: ""
+
+ec2_access_key: ""
+ec2_secret_key: ""
