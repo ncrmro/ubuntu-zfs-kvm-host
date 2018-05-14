@@ -6,7 +6,7 @@
   become: true
   gather_facts: True
   vars_files:
-    - secret
+    - vars/secret
     - vars/env.yml
     - vars/kvm.yml
     - vars/docker.yml
