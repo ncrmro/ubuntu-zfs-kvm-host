@@ -16,7 +16,7 @@
   ufw:
     rule: allow
     src: '{{ item }}'
-  with_items: "{{whitelisted_ips}}"
+  with_items: "{{whitelisted_ips | default([]) }}"
 
 - name: Secure instance
   ufw:
