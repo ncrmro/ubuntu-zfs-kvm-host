@@ -28,10 +28,8 @@ Install project dependencies and activate pipenv
 
 To get started working with ansible in development first run `vagrant up`
 
-SSH into your vagrant box
-`vagrant ssh`
-`ssh -i ".vagrant/machines/default/virtualbox/private_key" vagrant@10.0.1.10`
-`chmod 0444 .vagrant/machines/default/virtualbox/private_key`
+SSH into your vagrant box `vagrant ssh`
+
 
 #### Ansible Vault
 Create a password file
